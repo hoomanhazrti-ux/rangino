@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172f55"><title>رنگینو | رنگ‌آمیزی بخش‌به‌بخش</title>
+<style>
+:root{--navy:#172f55;--blue:#2f75d6;--muted:#718096;--line:#e4e9f1;--bg:#f5f7fb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#17243a;font-family:Tahoma,Arial,sans-serif}
+.app{max-width:570px;margin:auto;min-height:100vh;padding:16px 14px 28px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.brand{font-size:25px;font-weight:900;color:var(--navy);display:flex;align-items:center;gap:8px}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#1c3c68,#367de0);display:grid;place-items:center;color:white;font-size:21px}.tag{font-size:11px;color:var(--muted)}
+h1{font-size:20px;margin:10px 0 6px}p.sub{color:var(--muted);font-size:13px;line-height:1.9;margin:0 0 14px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px;margin:11px 0;box-shadow:0 5px 18px #23395b0a}
+.upload{display:block;text-align:center;padding:16px;border:1.5px dashed #9db5d5;border-radius:14px;background:#f8fbff;color:var(--navy);font-weight:bold;cursor:pointer}.upload small{display:block;color:var(--muted);font-weight:normal;margin-top:6px}input[type=file]{display:none}
+.canvas-wrap{background:#edf1f6;border-radius:14px;overflow:hidden;display:grid;place-items:center;min-height:160px}
+canvas{display:block;max-width:100%;height:auto;touch-action:none}.placeholder{padding:28px 12px;text-align:center;color:#7b8ba2;font-size:13px;line-height:2}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0}.label{font-size:13px;font-weight:bold}
+button{font-family:inherit;border:0;border-radius:12px;padding:11px 12px;font-weight:bold;cursor:pointer}
+.primary{background:var(--navy);color:white;width:100%;font-size:14px}.secondary{background:#edf3fb;color:var(--navy)}button:disabled{opacity:.5;cursor:not-allowed}
+.colors{display:flex;gap:9px;flex-wrap:wrap;margin:11px 0}.swatch{width:34px;height:34px;border-radius:50%;border:2px solid white;box-shadow:0 0 0 1px #d6deea;cursor:pointer;padding:0}.swatch.active{box-shadow:0 0 0 3px var(--blue)}
+input[type=color]{width:42px;height:38px;border:0;background:transparent;padding:0;cursor:pointer}input[type=range]{width:52%;accent-color:var(--blue)}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mode{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0}.mode button.active{background:var(--navy);color:#fff}
+.status{font-size:12px;color:#26704a;min-height:18px;margin-top:8px;line-height:1.8}.note{font-size:11px;color:var(--muted);line-height:1.9;margin:9px 2px 0}
+#regions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.chip{font-size:11px;background:#f0f4fa;border:1px solid var(--line);border-radius:20px;padding:7px 9px}
+@media(max-width:360px){.app{padding:11px 9px}.panel{padding:10px}}
+</style></head>
+<body><main class="app">
+<header><div class="brand"><span class="logo">◒</span> رنگینو</div><div class="tag">انتخاب رنگ هر سطح</div></header>
+<h1>برای هر دیوار یک رنگ جدا انتخاب کن</h1>
+<p class="sub">عکس خانه را وارد کن، رنگ هر بخش را جداگانه انتخاب کن و با انگشت محدوده همان دیوار یا سقف را رنگ بزن.</p>
+<section class="panel"><label class="upload" for="photo">＋ انتخاب عکس خانه یا اتاق<small>انتخاب عکس از گالری گوشی</small></label><input id="photo" type="file" accept="image/*"></section>
+<section class="panel">
+<div class="row"><span class="label">پیش‌نمایش خانه</span><span class="tag">روی بخش موردنظر بکش</span></div>
+<div class="canvas-wrap"><div class="placeholder" id="placeholder">هنوز عکسی انتخاب نشده است.</div><canvas id="view" hidden></canvas></div>
+<div class="status" id="status" aria-live="polite"></div>
+</section>
+<section class="panel">
+<div class="row"><span class="label">۱. انتخاب رنگ این بخش</span><input id="custom" type="color" value="#b7c6b0" aria-label="انتخاب رنگ دلخواه"></div>
+<div class="colors" id="colors">
+<button class="swatch active" data-color="#b7c6b0" style="background:#b7c6b0" aria-label="سبز ملایم"></button>
+<button class="swatch" data-color="#e8dfd0" style="background:#e8dfd0" aria-label="کرم"></button>
+<button class="swatch" data-color="#c9d7e5" style="background:#c9d7e5" aria-label="آبی روشن"></button>
+<button class="swatch" data-color="#d7b8ad" style="background:#d7b8ad" aria-label="صورتی خاکی"></button>
+<button class="swatch" data-color="#aaa9a1" style="background:#aaa9a1" aria-label="طوسی"></button>
+<button class="swatch" data-color="#d8c18e" style="background:#d8c18e" aria-label="طلایی ملایم"></button>
+<button class="swatch" data-color="#526b82" style="background:#526b82" aria-label="آبی تیره"></button>
+<button class="swatch" data-color="#eee9df" style="background:#eee9df" aria-label="سفید گرم"></button>
+</div>
+<div class="row"><label class="label" for="brush">اندازه قلم</label><input id="brush" type="range" min="5" max="100" value="30"><span class="tag" id="brushVal">۳۰</span></div>
+<div class="mode"><button class="secondary active" id="paintMode">✎ رنگ‌کردن بخش جدید</button><button class="secondary" id="eraseMode">پاک‌کن</button></div>
+<div class="tools"><button class="secondary" id="undo">↶ بازگشت</button><button class="secondary" id="clear">پاک‌کردن همه رنگ‌ها</button></div>
+<p class="note">برای مثال، رنگ کرم را انتخاب کن و دیوار سمت راست را بکش؛ بعد رنگ آبی را انتخاب کن و روی دیوار سمت چپ بکش. هر بخش رنگ خودش را حفظ می‌کند. برای لبه‌های دقیق، اندازه قلم را کوچک کن.</p>
+<div id="regions"></div>
+</section>
+<button class="primary" id="save">ذخیره تصویر نهایی برای مشتری</button>
+<p class="note">این نسخه، رنگ‌آمیزی جداگانه هر ناحیه را با قلم لمسی انجام می‌دهد. تشخیص خودکار مرز تک‌تک دیوارها هنوز نیازمند مدل تخصصی‌تر و اصلاح دستی مرزهاست؛ ابزار فعلی جایگزین اندازه‌گیری یا نمونه‌سازی حضوری رنگ نیست.</p>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),canvas=$('view'),ctx=canvas.getContext('2d');
+let base=null,overlay=null,painting=false,last=null,color='#b7c6b0',mode='paint',history=[],regionColors=[];
+const say=t=>$('status').textContent=t;
+function draw(){if(!base)return;ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(base,0,0);ctx.drawImage(overlay,0,0)}
+function snapshot(){if(!overlay)return;history.push(overlay.toDataURL());if(history.length>18)history.shift()}
+function setColor(c){color=c;$('custom').value=c;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',b.dataset.color===c))}
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
+function stroke(a,b){const c=overlay.getContext('2d');c.save();c.globalCompositeOperation=mode==='erase'?'destination-out':'source-over';c.strokeStyle=color;c.lineWidth=Number($('brush').value)*canvas.width/canvas.getBoundingClientRect().width;c.lineCap='round';c.lineJoin='round';c.globalAlpha=mode==='erase'?1:.58;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.restore();draw()}
+function updateRegions(){const box=$('regions');box.innerHTML='';regionColors.forEach((c,i)=>{const s=document.createElement('span');s.className='chip';s.textContent='بخش '+(i+1)+' · '+c;box.appendChild(s)})}
+$('photo').addEventListener('change',()=>{
+ const f=$('photo').files?.[0];if(!f)return;if(!f.type.startsWith('image/')){say('لطفاً عکس انتخاب کن.');return}
+ const img=new Image(),url=URL.createObjectURL(f);img.onload=()=>{
+ const scale=Math.min(1,1400/Math.max(img.naturalWidth,img.naturalHeight));canvas.width=Math.round(img.naturalWidth*scale);canvas.height=Math.round(img.naturalHeight*scale);
+ base=document.createElement('canvas');base.width=canvas.width;base.height=canvas.height;base.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+ overlay=document.createElement('canvas');overlay.width=canvas.width;overlay.height=canvas.height;history=[];regionColors=[];
+ canvas.hidden=false;$('placeholder').hidden=true;draw();updateRegions();say('عکس آماده است. رنگ را انتخاب کن و روی اولین دیوار بکش.');URL.revokeObjectURL(url);
+ };img.onerror=()=>{say('باز کردن عکس ممکن نشد.');URL.revokeObjectURL(url)};img.src=url;
+});
+$('colors').addEventListener('click',e=>{const b=e.target.closest('.swatch');if(b){setColor(b.dataset.color);say('رنگ این بخش انتخاب شد. حالا روی همان بخش بکش.')}});
+$('custom').addEventListener('input',()=>{setColor($('custom').value)});
+$('brush').addEventListener('input',()=>$('brushVal').textContent=$('brush').value);
+$('paintMode').addEventListener('click',()=>{mode='paint';$('paintMode').classList.add('active');$('eraseMode').classList.remove('active');say('حالت رنگ‌کردن فعال شد.')});
+$('eraseMode').addEventListener('click',()=>{mode='erase';$('eraseMode').classList.add('active');$('paintMode').classList.remove('active');say('پاک‌کن فعال شد؛ روی قسمت رنگ‌شده بکش.')});
+canvas.addEventListener('pointerdown',e=>{if(!base)return;painting=true;last=point(e);snapshot();canvas.setPointerCapture(e.pointerId);stroke(last,last)});
+canvas.addEventListener('pointermove',e=>{if(!painting)return;const p=point(e);stroke(last,p);last=p});
+function stop(){if(painting&&mode==='paint'){regionColors.push(color);updateRegions()}painting=false;last=null}
+canvas.addEventListener('pointerup',stop);canvas.addEventListener('pointercancel',stop);
+$('undo').addEventListener('click',()=>{if(!overlay||!history.length){say('مرحله‌ای برای بازگشت وجود ندارد.');return}const data=history.pop(),img=new Image();img.onload=()=>{const c=overlay.getContext('2d');c.clearRect(0,0,overlay.width,overlay.height);c.drawImage(img,0,0);draw();say('آخرین حرکت برگشت داده شد.')};img.src=data});
+$('clear').addEventListener('click',()=>{if(!overlay)return;snapshot();overlay.getContext('2d').clearRect(0,0,overlay.width,overlay.height);regionColors=[];updateRegions();draw();say('تمام رنگ‌های اضافه‌شده پاک شدند.')});
+$('save').addEventListener('click',()=>{if(!base){say('اول یک عکس انتخاب کن.');return}const out=document.createElement('canvas');out.width=canvas.width;out.height=canvas.height;const c=out.getContext('2d');c.drawImage(base,0,0);c.drawImage(overlay,0,0);const a=document.createElement('a');a.download='rangino-room-preview.png';a.href=out.toDataURL('image/png');a.click();say('تصویر نهایی ذخیره شد.')});
+})();
+</script></body></html>
